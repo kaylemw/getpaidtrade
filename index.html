@@ -166,7 +166,7 @@
             </div>
             <div class="form-group">
               <label>Amount Owed (£)</label>
-              <input type="number" id="amount" placeholder="e.g. 1450" min="1" />
+              <input type="text" inputmode="decimal" id="amount" placeholder="e.g. 1,450" oninput="formatNumberInput(this)" />
             </div>
             <div class="form-group">
               <label>Invoice Date</label>
@@ -309,7 +309,7 @@
 
   <footer>
     <div class="footer-logo">GetPaid<span>Trade</span></div>
-    <p>Built for UK tradespeople. Free to use.</p>
+    <p>Built for UK tradespeople. Free tools, plus Pro features for £24/mo.</p>
     <p style="width:100%;color:#444;font-size:11px;">GetPaidTrade provides AI-generated letter templates for informational purposes. This is not legal advice. For complex disputes, consult a solicitor. · <a href="/terms.html" style="color:#666;text-decoration:underline;">Terms of Service</a> · <a href="/privacy.html" style="color:#666;text-decoration:underline;">Privacy Policy</a></p>
   </footer>
 
@@ -318,10 +318,19 @@
   <script>
     let generatedLetter = '';
 
+    function formatNumberInput(input) {
+      let value = input.value.replace(/[^\d.]/g, '');
+      const parts = value.split('.');
+      if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('');
+      const [whole, decimal] = value.split('.');
+      const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      input.value = decimal !== undefined ? formattedWhole + '.' + decimal : formattedWhole;
+    }
+
     async function generateLetter() {
       const traderName = document.getElementById('traderName').value.trim();
       const customerName = document.getElementById('customerName').value.trim();
-      const amount = document.getElementById('amount').value.trim();
+      const amount = document.getElementById('amount').value.trim().replace(/,/g, '');
       const invoiceDate = document.getElementById('invoiceDate').value;
       const daysOverdue = document.getElementById('daysOverdue').value;
       const trade = document.getElementById('trade').value;
