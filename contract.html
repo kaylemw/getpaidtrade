@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contract Generator — GetPaidTrade Pro</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --yellow: #F5C400; --yellow-dark: #D4A900; --black: #0F0F0F; --dark: #1A1A1A;
+      --mid: #2A2A2A; --border: #333333; --text: #E8E8E8; --muted: #888888;
+      --white: #FFFFFF; --green: #2ECC71;
+    }
+    body { background: var(--black); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(15,15,15,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.05em; color: var(--white); }
+    .nav-logo span { color: var(--yellow); }
+    .pro-badge { background: var(--yellow); color: var(--black); font-weight: 700; font-size: 11px; padding: 4px 10px; border-radius: 4px; letter-spacing: 0.05em; }
+    .container { max-width: 760px; margin: 0 auto; padding: 48px 24px; }
+    .hero { text-align: center; margin-bottom: 40px; }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 6vw, 56px); color: var(--white); letter-spacing: 0.02em; margin-bottom: 12px; }
+    .hero h1 span { color: var(--yellow); }
+    .hero p { color: var(--muted); font-size: 15px; }
+    .tool-card { background: var(--dark); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+    .tool-card-header { background: var(--mid); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 10px; }
+    .tool-card-header-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); }
+    .tool-card-header span { font-size: 13px; font-weight: 600; color: var(--text); }
+    .tool-card-body { padding: 28px 24px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+    input, select, textarea { background: var(--mid); border: 1px solid var(--border); border-radius: 6px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 14px; padding: 10px 14px; transition: border-color 0.15s; outline: none; width: 100%; }
+    input::placeholder, textarea::placeholder { color: #555; }
+    input:focus, select:focus, textarea:focus { border-color: var(--yellow); }
+    select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    select option { background: var(--dark); }
+    textarea { resize: vertical; min-height: 90px; }
+    .btn-primary { width: 100%; background: var(--yellow); color: var(--black); font-family: 'Inter', sans-serif; font-weight: 700; font-size: 15px; padding: 14px 24px; border: none; border-radius: 6px; cursor: pointer; transition: background 0.15s; }
+    .btn-primary:hover { background: var(--yellow-dark); }
+    .loading-state { display: none; text-align: center; padding: 40px 24px; }
+    .spinner { width: 36px; height: 36px; border: 3px solid var(--border); border-top-color: var(--yellow); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-state p { color: var(--muted); font-size: 14px; }
+    .result-state { display: none; }
+    .result-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 12px; }
+    .result-badge { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--green); }
+    .result-badge::before { content: ''; display: block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .result-actions { display: flex; gap: 8px; }
+    .btn-outline { background: transparent; color: var(--text); font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; padding: 8px 14px; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; }
+    .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+    .contract-output { background: var(--mid); border: 1px solid var(--border); border-radius: 8px; padding: 28px; font-size: 14px; line-height: 1.8; color: var(--text); white-space: pre-wrap; font-family: 'Inter', sans-serif; min-height: 300px; }
+    .btn-reset { background: transparent; color: var(--muted); font-size: 13px; border: none; cursor: pointer; text-decoration: underline; margin-top: 16px; }
+    .access-denied { text-align: center; padding: 80px 24px; }
+    .access-denied h1 { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--white); margin-bottom: 16px; }
+    .access-denied p { color: var(--muted); margin-bottom: 24px; }
+    .access-denied a { color: var(--yellow); text-decoration: none; font-weight: 600; }
+    .error-msg { background: rgba(232,64,64,0.1); border: 1px solid rgba(232,64,64,0.3); color: #FF8080; font-size: 13px; padding: 12px 16px; border-radius: 6px; margin-top: 12px; display: none; }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--dark); border: 1px solid var(--green); color: var(--green); font-size: 13px; font-weight: 600; padding: 12px 20px; border-radius: 8px; opacity: 0; transform: translateY(8px); transition: all 0.2s; pointer-events: none; z-index: 999; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">GetPaid<span>Trade</span></div>
+    <div class="pro-badge">PRO</div>
+  </nav>
+
+  <div class="container" id="mainContainer">
+    <!-- Content injected by JS based on access check -->
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard ✓</div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const email = urlParams.get('email');
+    const token = urlParams.get('token');
+    let generatedContract = '';
+
+    // Basic client-side check — full verification happens server-side on generate
+    if (!email || !token) {
+      document.getElementById('mainContainer').innerHTML = `
+        <div class="access-denied">
+          <h1>Access Required</h1>
+          <p>This page requires a valid access link sent to your email after subscribing to GetPaidTrade Pro.</p>
+          <a href="/">← Back to GetPaidTrade</a>
+        </div>
+      `;
+    } else {
+      renderTool();
+    }
+
+    function renderTool() {
+      document.getElementById('mainContainer').innerHTML = `
+        <div class="hero">
+          <h1>Contract <span>Generator</span></h1>
+          <p>Protect your next job before it starts. Generate a watertight UK contract in seconds.</p>
+        </div>
+        <div class="tool-card">
+          <div class="tool-card-header">
+            <div class="tool-card-header-dot"></div>
+            <span>Job Contract Generator</span>
+          </div>
+          <div class="tool-card-body">
+            <div id="formState">
+              <div class="form-grid">
+                <div class="form-group"><label>Your Name / Business</label><input type="text" id="traderName" placeholder="e.g. Dave's Plumbing" /></div>
+                <div class="form-group"><label>Customer Name</label><input type="text" id="customerName" placeholder="e.g. John Smith" /></div>
+                <div class="form-group"><label>Job Total (£)</label><input type="number" id="jobAmount" placeholder="e.g. 3500" min="1" /></div>
+                <div class="form-group"><label>Deposit Required (£)</label><input type="number" id="deposit" placeholder="e.g. 1000" min="0" /></div>
+                <div class="form-group"><label>Estimated Start Date</label><input type="date" id="startDate" /></div>
+                <div class="form-group"><label>Your Trade</label>
+                  <select id="trade">
+                    <option value="">Select...</option>
+                    <option>Plumber</option><option>Electrician</option><option>Builder</option>
+                    <option>Roofer</option><option>Carpenter / Joiner</option><option>Plasterer</option>
+                    <option>Painter & Decorator</option><option>Gas Engineer</option><option>Landscaper</option><option>Other</option>
+                  </select>
+                </div>
+                <div class="form-group full"><label>Job Description</label><textarea id="jobDesc" placeholder="e.g. Full bathroom refit including new suite, tiling, plumbing and electrics. Estimated 5 working days."></textarea></div>
+              </div>
+              <div class="error-msg" id="errorMsg"></div>
+              <button class="btn-primary" onclick="generateContract()">Generate Contract</button>
+            </div>
+            <div class="loading-state" id="loadingState">
+              <div class="spinner"></div>
+              <p>Drafting your contract...</p>
+            </div>
+            <div class="result-state" id="resultState">
+              <div class="result-header">
+                <div class="result-badge">Contract ready</div>
+                <div class="result-actions">
+                  <button class="btn-outline" onclick="copyContract()">Copy</button>
+                  <button class="btn-outline" onclick="printContract()">Print / Save PDF</button>
+                </div>
+              </div>
+              <div class="contract-output" id="contractOutput"></div>
+              <button class="btn-reset" onclick="resetForm()">← Generate another contract</button>
+            </div>
+          </div>
+        </div>
+      `;
+      const d = new Date();
+      d.setDate(d.getDate() + 7);
+      document.getElementById('startDate').value = d.toISOString().split('T')[0];
+    }
+
+    async function generateContract() {
+      const traderName = document.getElementById('traderName').value.trim();
+      const customerName = document.getElementById('customerName').value.trim();
+      const jobAmount = document.getElementById('jobAmount').value.trim();
+      const deposit = document.getElementById('deposit').value.trim();
+      const startDate = document.getElementById('startDate').value;
+      const trade = document.getElementById('trade').value;
+      const jobDesc = document.getElementById('jobDesc').value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+
+      errorMsg.style.display = 'none';
+
+      if (!traderName || !customerName || !jobAmount || !trade || !jobDesc) {
+        errorMsg.textContent = 'Please fill in all required fields.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      document.getElementById('formState').style.display = 'none';
+      document.getElementById('loadingState').style.display = 'block';
+      document.getElementById('resultState').style.display = 'none';
+
+      const formattedTotal = parseFloat(jobAmount).toLocaleString('en-GB', { minimumFractionDigits: 2 });
+      const formattedDeposit = deposit ? parseFloat(deposit).toLocaleString('en-GB', { minimumFractionDigits: 2 }) : '0.00';
+      const formattedStart = startDate ? new Date(startDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'to be agreed';
+
+      const prompt = `You are a UK contract specialist drafting a professional job contract for a tradesperson.
+
+Write a complete, watertight UK tradesperson job contract with these details:
+- Tradesperson/business: ${traderName}
+- Trade: ${trade}
+- Customer: ${customerName}
+- Total job value: £${formattedTotal}
+- Deposit required: £${formattedDeposit}
+- Estimated start date: ${formattedStart}
+- Job description: ${jobDesc}
+
+Requirements:
+- Proper UK contract structure with numbered clauses
+- Clear payment terms including deposit, staged payments if relevant, and final payment timing
+- Late payment clause referencing the Late Payment of Commercial Debts (Interest) Act 1998
+- Scope of work clearly defined from the job description
+- Variations/changes clause — extra work requires written agreement and additional cost
+- Cancellation clause protecting the tradesperson if customer cancels after work begins
+- Materials and access clause — customer must provide reasonable access and any materials not supplied by tradesperson
+- Dispute resolution clause
+- Signature blocks for both parties at the end
+- Do NOT use placeholder brackets like [ADDRESS] — write naturally, only leave BANK DETAILS as a clear placeholder for payment
+
+Output only the contract itself, no commentary before or after.`;
+
+      try {
+        const response = await fetch('/api/generate-contract', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt })
+        });
+
+        const data = await response.json();
+        if (data.error) throw new Error(data.error);
+
+        generatedContract = data.contract;
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('resultState').style.display = 'block';
+        document.getElementById('contractOutput').textContent = generatedContract;
+
+      } catch (err) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('formState').style.display = 'block';
+        errorMsg.textContent = 'Something went wrong generating your contract. Please try again.';
+        errorMsg.style.display = 'block';
+      }
+    }
+
+    function copyContract() {
+      navigator.clipboard.writeText(generatedContract).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      });
+    }
+
+    function printContract() {
+      const win = window.open('', '_blank');
+      win.document.write('<html><head><title>Contract — GetPaidTrade</title><style>body{font-family:Arial,sans-serif;font-size:14px;line-height:1.8;padding:60px;color:#111;max-width:700px;margin:0 auto;}pre{white-space:pre-wrap;font-family:Arial,sans-serif;}</style></head><body><pre>' + generatedContract + '</pre></body></html>');
+      win.document.close();
+      win.print();
+    }
+
+    function resetForm() {
+      renderTool();
+    }
+  </script>
+
+</body>
+</html>
