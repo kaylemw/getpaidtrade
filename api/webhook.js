@@ -1,40 +1,49 @@
-export default async function handler(req) {
+import crypto from 'node:crypto';
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
+function getRawBody(req) {
+  return new Promise((resolve, reject) => {
+    let data = '';
+    req.on('data', (chunk) => { data += chunk; });
+    req.on('end', () => resolve(data));
+    req.on('error', reject);
+  });
+}
+
+export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    const rawBody = await req.text();
+    const rawBody = await getRawBody(req);
     const body = JSON.parse(rawBody);
 
     // Verify webhook signature for security
-    const crypto = await import('node:crypto');
-    const signature = req.headers.get('x-signature');
+    const signature = req.headers['x-signature'];
     const hmac = crypto.createHmac('sha256', process.env.LEMONSQUEEZY_WEBHOOK_SECRET);
     const digest = hmac.update(rawBody).digest('hex');
 
     if (signature !== digest) {
-      return new Response(JSON.stringify({ error: 'Invalid signature' }), {
-        status: 401,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return res.status(401).json({ error: 'Invalid signature' });
     }
 
     const eventName = body.meta?.event_name;
 
     // Only act on successful subscription creation or order completion
     if (eventName === 'subscription_created' || eventName === 'order_created') {
-      const email = body.data?.attributes?.user_email || body.data?.attributes?.email;
-      const name = body.data?.attributes?.user_name || body.data?.attributes?.name || '';
+      // LemonSqueezy puts customer email under attributes.user_email
+      const email = body.data?.attributes?.user_email;
+      const name = body.data?.attributes?.user_name || '';
 
       if (!email) {
-        return new Response(JSON.stringify({ error: 'No email found in webhook payload' }), {
-          status: 400,
-          headers: { 'Content-Type': 'application/json' },
-        });
+        console.error('No email found in payload:', JSON.stringify(body.data?.attributes));
+        return res.status(400).json({ error: 'No email found in webhook payload' });
       }
 
       // Generate a simple access token (in production, store this in a database
@@ -83,16 +92,10 @@ export default async function handler(req) {
       });
     }
 
-    return new Response(JSON.stringify({ received: true }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(200).json({ received: true });
 
   } catch (err) {
     console.error('Webhook error:', err);
-    return new Response(JSON.stringify({ error: 'Webhook processing failed' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return res.status(500).json({ error: 'Webhook processing failed' });
   }
 }
