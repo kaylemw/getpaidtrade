@@ -35,8 +35,11 @@ export default async function handler(req, res) {
 
     const eventName = body.meta?.event_name;
 
-    // Only act on successful subscription creation or order completion
-    if (eventName === 'subscription_created' || eventName === 'order_created') {
+    // Only act on subscription_created. LemonSqueezy fires both
+    // order_created and subscription_created for the same purchase,
+    // which previously caused two duplicate access link emails.
+    // subscription_created is the more accurate event for what we sell.
+    if (eventName === 'subscription_created') {
       // LemonSqueezy puts customer email under attributes.user_email
       const email = body.data?.attributes?.user_email;
       const name = body.data?.attributes?.user_name || '';
