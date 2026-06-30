@@ -217,7 +217,7 @@ Output only the contract itself, no commentary before or after.`;
         const response = await fetch('/api/generate-contract', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt })
+          body: JSON.stringify({ prompt, email, token })
         });
 
         const data = await response.json();
@@ -232,7 +232,11 @@ Output only the contract itself, no commentary before or after.`;
       } catch (err) {
         document.getElementById('loadingState').style.display = 'none';
         document.getElementById('formState').style.display = 'block';
-        errorMsg.textContent = 'Something went wrong generating your contract. Please try again.';
+        if (err.message && err.message.toLowerCase().includes('access denied')) {
+          errorMsg.textContent = 'This access link is invalid or has expired. Please check your email for a valid link, or contact us if you believe this is an error.';
+        } else {
+          errorMsg.textContent = 'Something went wrong generating your contract. Please try again.';
+        }
         errorMsg.style.display = 'block';
       }
     }

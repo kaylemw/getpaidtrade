@@ -8,11 +8,38 @@ export default async function handler(req) {
 
   try {
     const body = await req.json();
-    const { prompt } = body;
+    const { prompt, email, token } = body;
 
     if (!prompt) {
       return new Response(JSON.stringify({ error: 'No prompt provided' }), {
         status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    if (!email || !token) {
+      return new Response(JSON.stringify({ error: 'Access denied. Missing credentials.' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Verify the token actually exists in Upstash and matches this email,
+    // rather than trusting whatever was passed in the URL. This stops a
+    // forwarded link from working for anyone other than the original subscriber's
+    // verified token/email pair.
+    const kvCheckResponse = await fetch(`${process.env.KV_REST_API_URL}/get/token:${token}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}`,
+      },
+    });
+
+    const kvData = await kvCheckResponse.json();
+    const storedEmail = kvData?.result ? decodeURIComponent(kvData.result) : null;
+
+    if (!storedEmail || storedEmail.toLowerCase() !== email.toLowerCase()) {
+      return new Response(JSON.stringify({ error: 'Access denied. Invalid or expired access link.' }), {
+        status: 403,
         headers: { 'Content-Type': 'application/json' },
       });
     }

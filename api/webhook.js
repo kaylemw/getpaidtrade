@@ -46,11 +46,25 @@ export default async function handler(req, res) {
         return res.status(400).json({ error: 'No email found in webhook payload' });
       }
 
-      // Generate a simple access token (in production, store this in a database
-      // mapped to the email/subscription — for now using a signed token approach)
+      // Generate a unique access token
       const tokenData = `${email}:${Date.now()}`;
       const tokenHmac = crypto.createHmac('sha256', process.env.ACCESS_TOKEN_SECRET || process.env.LEMONSQUEEZY_WEBHOOK_SECRET);
       const token = tokenHmac.update(tokenData).digest('hex').substring(0, 32);
+
+      // Store the token in Upstash, mapped to this email, so it can be verified
+      // on every contract generation rather than trusted blindly from the URL.
+      // Set to expire in 400 days — long enough to outlast any annual subscription
+      // without requiring renewal logic, short enough to eventually clean up unused tokens.
+      const kvResponse = await fetch(`${process.env.KV_REST_API_URL}/set/token:${token}/${encodeURIComponent(email)}/EX/34560000`, {
+        headers: {
+          Authorization: `Bearer ${process.env.KV_REST_API_TOKEN}`,
+        },
+      });
+
+      if (!kvResponse.ok) {
+        console.error('Failed to store access token in Upstash');
+        // Don't block the email send — but log this so it's visible if it happens
+      }
 
       const accessUrl = `https://getpaidtrade.co.uk/contract.html?email=${encodeURIComponent(email)}&token=${token}`;
 
