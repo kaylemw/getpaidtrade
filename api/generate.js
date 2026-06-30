@@ -1,18 +1,10 @@
-export const config = {
-  runtime: 'edge',
-};
-
 export default async function handler(req) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return new Response(JSON.stringify({ error: 'Method not allowed' }), {
       status: 405,
       headers: { 'Content-Type': 'application/json' },
     });
   }
-
-  // Basic rate limiting check via headers
-  const origin = req.headers.get('origin');
 
   try {
     const body = await req.json();
@@ -25,7 +17,6 @@ export default async function handler(req) {
       });
     }
 
-    // Call Claude API server-side — key is never exposed to browser
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -58,6 +49,7 @@ export default async function handler(req) {
         'Access-Control-Allow-Origin': '*',
       },
     });
+
   } catch (err) {
     return new Response(JSON.stringify({ error: 'Something went wrong. Please try again.' }), {
       status: 500,
@@ -65,3 +57,7 @@ export default async function handler(req) {
     });
   }
 }
+
+export const config = {
+  runtime: 'edge',
+};
