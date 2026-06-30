@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /contract.html
+
+Sitemap: https://getpaidtrade.co.uk/sitemap.xml
