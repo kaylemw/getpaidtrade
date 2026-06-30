@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://getpaidtrade.co.uk/</loc>
+    <loc>https://www.getpaidtrade.co.uk/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://getpaidtrade.co.uk/interest-calculator.html</loc>
+    <loc>https://www.getpaidtrade.co.uk/interest-calculator.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://getpaidtrade.co.uk/interest-late-invoice-uk.html</loc>
+    <loc>https://www.getpaidtrade.co.uk/interest-late-invoice-uk.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://getpaidtrade.co.uk/terms.html</loc>
+    <loc>https://www.getpaidtrade.co.uk/terms.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://getpaidtrade.co.uk/privacy.html</loc>
+    <loc>https://www.getpaidtrade.co.uk/privacy.html</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

@@ -69,7 +69,7 @@ export default async function handler(req, res) {
         // Don't block the email send — but log this so it's visible if it happens
       }
 
-      const accessUrl = `https://getpaidtrade.co.uk/contract.html?email=${encodeURIComponent(email)}&token=${token}`;
+      const accessUrl = `https://www.getpaidtrade.co.uk/contract.html?email=${encodeURIComponent(email)}&token=${token}`;
 
       // Send magic link email via Resend
       await fetch('https://api.resend.com/emails', {
