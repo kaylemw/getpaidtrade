@@ -83,6 +83,15 @@
     const token = urlParams.get('token');
     let generatedContract = '';
 
+    function formatNumberInput(input) {
+      let value = input.value.replace(/[^\d.]/g, '');
+      const parts = value.split('.');
+      if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('');
+      const [whole, decimal] = value.split('.');
+      const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      input.value = decimal !== undefined ? formattedWhole + '.' + decimal : formattedWhole;
+    }
+
     // Basic client-side check — full verification happens server-side on generate
     if (!email || !token) {
       document.getElementById('mainContainer').innerHTML = `
@@ -112,8 +121,8 @@
               <div class="form-grid">
                 <div class="form-group"><label>Your Name / Business</label><input type="text" id="traderName" placeholder="e.g. Dave's Plumbing" /></div>
                 <div class="form-group"><label>Customer Name</label><input type="text" id="customerName" placeholder="e.g. John Smith" /></div>
-                <div class="form-group"><label>Job Total (£)</label><input type="number" id="jobAmount" placeholder="e.g. 3500" min="1" /></div>
-                <div class="form-group"><label>Deposit Required (£)</label><input type="number" id="deposit" placeholder="e.g. 1000" min="0" /></div>
+                <div class="form-group"><label>Job Total (£)</label><input type="text" inputmode="decimal" id="jobAmount" placeholder="e.g. 3,500" oninput="formatNumberInput(this)" /></div>
+                <div class="form-group"><label>Deposit Required (£)</label><input type="text" inputmode="decimal" id="deposit" placeholder="e.g. 1,000" oninput="formatNumberInput(this)" /></div>
                 <div class="form-group"><label>Estimated Start Date</label><input type="date" id="startDate" /></div>
                 <div class="form-group"><label>Your Trade</label>
                   <select id="trade">
@@ -154,8 +163,8 @@
     async function generateContract() {
       const traderName = document.getElementById('traderName').value.trim();
       const customerName = document.getElementById('customerName').value.trim();
-      const jobAmount = document.getElementById('jobAmount').value.trim();
-      const deposit = document.getElementById('deposit').value.trim();
+      const jobAmount = document.getElementById('jobAmount').value.trim().replace(/,/g, '');
+      const deposit = document.getElementById('deposit').value.trim().replace(/,/g, '');
       const startDate = document.getElementById('startDate').value;
       const trade = document.getElementById('trade').value;
       const jobDesc = document.getElementById('jobDesc').value.trim();
