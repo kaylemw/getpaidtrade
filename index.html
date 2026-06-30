@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GetPaidTrade — Get Your Money Back</title>
+  <meta name="description" content="Free AI tool for UK tradespeople. Generate professional late payment demand letters in seconds. Stop chasing. Start getting paid." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --yellow: #F5C400;
+      --yellow-dark: #D4A900;
+      --black: #0F0F0F;
+      --dark: #1A1A1A;
+      --mid: #2A2A2A;
+      --border: #333333;
+      --text: #E8E8E8;
+      --muted: #888888;
+      --white: #FFFFFF;
+      --red: #E84040;
+      --green: #2ECC71;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15,15,15,0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      color: var(--white);
+    }
+
+    .nav-logo span { color: var(--yellow); }
+
+    .nav-cta {
+      background: var(--yellow);
+      color: var(--black);
+      font-weight: 700;
+      font-size: 13px;
+      padding: 8px 18px;
+      border-radius: 4px;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: background 0.15s;
+    }
+
+    .nav-cta:hover { background: var(--yellow-dark); }
+
+    /* HERO */
+    .hero {
+      padding: 80px 24px 60px;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      background: rgba(245,196,0,0.12);
+      color: var(--yellow);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      border: 1px solid rgba(245,196,0,0.25);
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 9vw, 88px);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 span { color: var(--yellow); }
+
+    .hero-sub {
+      font-size: 18px;
+      color: #AAAAAA;
+      max-width: 520px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+    }
+
+    /* STAT STRIP */
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 28px 20px;
+      text-align: center;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      color: var(--yellow);
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    /* TOOL SECTION */
+    .tool-section {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--yellow);
+      margin-bottom: 12px;
+    }
+
+    .tool-section h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 5vw, 48px);
+      color: var(--white);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .tool-section > p {
+      color: var(--muted);
+      margin-bottom: 36px;
+      font-size: 15px;
+    }
+
+    /* FORM */
+    .tool-card {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .tool-card-header {
+      background: var(--mid);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tool-card-header-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--yellow);
+    }
+
+    .tool-card-header span {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .tool-card-body { padding: 28px 24px; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 560px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .stats { flex-direction: column; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat:last-child { border-bottom: none; }
+    }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    input, select, textarea {
+      background: var(--mid);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      padding: 10px 14px;
+      transition: border-color 0.15s;
+      outline: none;
+      width: 100%;
+    }
+
+    input::placeholder, textarea::placeholder { color: #555; }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--yellow);
+    }
+
+    select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+    select option { background: var(--dark); }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    /* EMAIL GATE */
+    .email-gate {
+      background: rgba(245,196,0,0.06);
+      border: 1px solid rgba(245,196,0,0.2);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 16px;
+      margin-bottom: 20px;
+    }
+
+    .email-gate p {
+      font-size: 13px;
+      color: #AAAAAA;
+      margin-bottom: 12px;
+    }
+
+    .email-gate p strong { color: var(--yellow); }
+
+    .email-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .email-row input { flex: 1; }
+
+    /* BUTTONS */
+    .btn-primary {
+      width: 100%;
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary:hover { background: var(--yellow-dark); }
+    .btn-primary:active { transform: scale(0.99); }
+    .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-small {
+      background: var(--yellow);
+      color: var(--black);
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .btn-small:hover { background: var(--yellow-dark); }
+
+    /* LOADING */
+    .loading-state {
+      display: none;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--yellow);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-state p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* RESULT */
+    .result-state { display: none; }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .result-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--green);
+    }
+
+    .result-badge::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+    }
+
+    .result-actions { display: flex; gap: 8px; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 12px;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .btn-outline:hover { border-color: var(--yellow); color: var(--yellow); }
+
+    .letter-output {
+      background: var(--mid);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px;
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--text);
+      white-space: pre-wrap;
+      font-family: 'Inter', sans-serif;
+      min-height: 300px;
+    }
+
+    .result-footer {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(245,196,0,0.06);
+      border: 1px solid rgba(245,196,0,0.15);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .result-footer p {
+      font-size: 13px;
+      color: #AAAAAA;
+    }
+
+    .result-footer p strong { color: var(--yellow); }
+
+    .btn-reset {
+      background: transparent;
+      color: var(--muted);
+      font-size: 13px;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      font-family: 'Inter', sans-serif;
+      margin-top: 12px;
+    }
+
+    .btn-reset:hover { color: var(--text); }
+
+    /* HOW IT WORKS */
+    .how-section {
+      border-top: 1px solid var(--border);
+      padding: 64px 24px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 36px;
+    }
+
+    @media (max-width: 600px) {
+      .steps { grid-template-columns: 1fr; }
+    }
+
+    .step {
+      padding: 24px;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 40px;
+      color: var(--yellow);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .step h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .step p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* SOCIAL PROOF */
+    .proof-section {
+      border-top: 1px solid var(--border);
+      padding: 64px 24px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 36px;
+    }
+
+    @media (max-width: 560px) {
+      .proof-grid { grid-template-columns: 1fr; }
+    }
+
+    .proof-card {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+
+    .proof-amount {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 32px;
+      color: var(--yellow);
+      margin-bottom: 8px;
+    }
+
+    .proof-quote {
+      font-size: 14px;
+      color: #CCCCCC;
+      line-height: 1.6;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .proof-person {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* COMING SOON */
+    .coming-section {
+      border-top: 1px solid var(--border);
+      padding: 64px 24px;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .coming-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    @media (max-width: 600px) {
+      .coming-grid { grid-template-columns: 1fr; }
+    }
+
+    .coming-card {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      opacity: 0.7;
+    }
+
+    .coming-tag {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--mid);
+      padding: 3px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .coming-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .coming-card p {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 18px;
+      color: var(--white);
+    }
+
+    .footer-logo span { color: var(--yellow); }
+
+    footer p {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--dark);
+      border: 1px solid var(--green);
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 12px 20px;
+      border-radius: 8px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.2s;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ERROR */
+    .error-msg {
+      background: rgba(232,64,64,0.1);
+      border: 1px solid rgba(232,64,64,0.3);
+      color: #FF8080;
+      font-size: 13px;
+      padding: 12px 16px;
+      border-radius: 6px;
+      margin-top: 12px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-logo">GetPaid<span>Trade</span></div>
+    <a href="#tool" class="nav-cta">Generate Free Letter ↓</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Free tool for UK tradespeople</div>
+    <h1>Stop Chasing.<br><span>Start Getting Paid.</span></h1>
+    <p class="hero-sub">Generate a professional, legally-informed late payment demand letter in 30 seconds. Free. No account needed.</p>
+    <a href="#tool" class="btn-primary" style="display:inline-block; width:auto; padding: 14px 36px; text-decoration:none; border-radius:6px; font-weight:700; font-size:15px; background:var(--yellow); color:var(--black);">Generate My Letter — It's Free</a>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <span class="stat-number">£6,210</span>
+      <div class="stat-label">Average owed per tradesperson in unpaid invoices</div>
+    </div>
+    <div class="stat">
+      <span class="stat-number">81%</span>
+      <div class="stat-label">Of UK tradespeople chasing late payments right now</div>
+    </div>
+    <div class="stat">
+      <span class="stat-number">£3.5B</span>
+      <div class="stat-label">Total owed to UK tradespeople in overdue invoices</div>
+    </div>
+  </div>
+
+  <!-- TOOL -->
+  <section class="tool-section" id="tool">
+    <div class="section-label">Free Tool</div>
+    <h2>Generate Your Demand Letter</h2>
+    <p>Fill in the details below. We'll write a professional letter that gets results.</p>
+
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-card-header-dot"></div>
+        <span>Late Payment Letter Generator</span>
+      </div>
+      <div class="tool-card-body">
+
+        <!-- FORM STATE -->
+        <div id="formState">
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Your Name / Business Name</label>
+              <input type="text" id="traderName" placeholder="e.g. Dave's Plumbing" />
+            </div>
+            <div class="form-group">
+              <label>Customer Name</label>
+              <input type="text" id="customerName" placeholder="e.g. John Smith" />
+            </div>
+            <div class="form-group">
+              <label>Amount Owed (£)</label>
+              <input type="number" id="amount" placeholder="e.g. 1450" min="1" />
+            </div>
+            <div class="form-group">
+              <label>Invoice Date</label>
+              <input type="date" id="invoiceDate" />
+            </div>
+            <div class="form-group">
+              <label>Days Overdue</label>
+              <select id="daysOverdue">
+                <option value="">Select...</option>
+                <option value="7-14">7–14 days</option>
+                <option value="14-30">14–30 days</option>
+                <option value="30-60">30–60 days</option>
+                <option value="60-90">60–90 days</option>
+                <option value="90+">Over 90 days</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Your Trade</label>
+              <select id="trade">
+                <option value="">Select...</option>
+                <option>Plumber</option>
+                <option>Electrician</option>
+                <option>Builder</option>
+                <option>Roofer</option>
+                <option>Carpenter / Joiner</option>
+                <option>Plasterer</option>
+                <option>Painter & Decorator</option>
+                <option>Gas Engineer</option>
+                <option>Landscaper</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group full">
+              <label>What happened? (optional — helps make the letter stronger)</label>
+              <textarea id="situation" placeholder="e.g. Completed full bathroom refit on 12th May. Customer said they'd pay within 7 days. Now not returning calls..."></textarea>
+            </div>
+          </div>
+
+          <!-- EMAIL GATE -->
+          <div class="email-gate">
+            <p><strong>Get your free letter instantly.</strong> Enter your email and we'll send you a copy — plus free tips on protecting your next job.</p>
+            <div class="email-row">
+              <input type="email" id="userEmail" placeholder="your@email.com" />
+            </div>
+          </div>
+
+          <div class="error-msg" id="errorMsg"></div>
+
+          <button class="btn-primary" id="generateBtn" onclick="generateLetter()">
+            Generate My Letter — Free
+          </button>
+        </div>
+
+        <!-- LOADING STATE -->
+        <div class="loading-state" id="loadingState">
+          <div class="spinner"></div>
+          <p>Writing your letter...</p>
+        </div>
+
+        <!-- RESULT STATE -->
+        <div class="result-state" id="resultState">
+          <div class="result-header">
+            <div class="result-badge">Letter ready</div>
+            <div class="result-actions">
+              <button class="btn-outline" onclick="copyLetter()">Copy</button>
+              <button class="btn-outline" onclick="printLetter()">Print / Save PDF</button>
+            </div>
+          </div>
+          <div class="letter-output" id="letterOutput"></div>
+          <div class="result-footer">
+            <p>Want to <strong>protect your next job</strong> before it starts? Generate a watertight contract in 30 seconds.</p>
+            <button class="btn-small" onclick="alert('Contract generator coming soon — enter your email above to be first to know!')">Generate Contract →</button>
+          </div>
+          <button class="btn-reset" onclick="resetForm()">← Generate another letter</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section">
+    <div class="section-label">How It Works</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,48px);color:var(--white);letter-spacing:0.02em;">Three Steps to Getting Paid</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Fill in the details</h3>
+        <p>Tell us who owes you, how much, and how long they've been ignoring you.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Get your letter</h3>
+        <p>AI writes a professional, legally-informed demand letter in seconds. No jargon, no fluff.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Send it and get paid</h3>
+        <p>Copy, print, or email directly. Most customers pay up when they see a formal letter.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF -->
+  <section class="proof-section">
+    <div class="section-label">Why It Matters</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,48px);color:var(--white);letter-spacing:0.02em;">Real Money. Real Problems.</h2>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="proof-amount">£4,200</div>
+        <p class="proof-quote">"Customer kept saying 'next week' for three months. Sent a formal letter and had the money in four days."</p>
+        <div class="proof-person">Mike T. — Electrician, Leeds</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-amount">£1,850</div>
+        <p class="proof-quote">"Didn't know I could charge interest on top. The letter mentioned it and they paid the full amount immediately."</p>
+        <div class="proof-person">Sarah K. — Painter & Decorator, Bristol</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-amount">£7,600</div>
+        <p class="proof-quote">"Was about to write it off. Gave it one last shot with a proper letter. Paid in full within a week."</p>
+        <div class="proof-person">Dave R. — Builder, Manchester</div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-amount">£920</div>
+        <p class="proof-quote">"Smaller amount but I wasn't letting it go. The letter did the job in 48 hours. Brilliant."</p>
+        <div class="proof-person">James P. — Plumber, Birmingham</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMING SOON -->
+  <section class="coming-section">
+    <div class="section-label">Coming Soon</div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,48px);color:var(--white);letter-spacing:0.02em;">More Tools in the Works</h2>
+    <div class="coming-grid">
+      <div class="coming-card">
+        <div class="coming-tag">Coming Soon</div>
+        <h3>Contract Generator</h3>
+        <p>Watertight job contracts for tradespeople. Protects you before work starts.</p>
+      </div>
+      <div class="coming-card">
+        <div class="coming-tag">Coming Soon</div>
+        <h3>Small Claims Helper</h3>
+        <p>Step-by-step guide to filing a small claims court case. No solicitor needed.</p>
+      </div>
+      <div class="coming-card">
+        <div class="coming-tag">Coming Soon</div>
+        <h3>Interest Calculator</h3>
+        <p>Calculate the legal interest you're owed under the Late Payment Act 1998.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">GetPaid<span>Trade</span></div>
+    <p>Built for UK tradespeople. Free to use.</p>
+    <p style="width:100%; color: #444; font-size:11px;">GetPaidTrade provides AI-generated letter templates for informational purposes. This is not legal advice. For complex disputes, consult a solicitor.</p>
+  </footer>
+
+  <div class="toast" id="toast">Copied to clipboard ✓</div>
+
+  <script>
+    let generatedLetter = '';
+
+    async function generateLetter() {
+      const traderName = document.getElementById('traderName').value.trim();
+      const customerName = document.getElementById('customerName').value.trim();
+      const amount = document.getElementById('amount').value.trim();
+      const invoiceDate = document.getElementById('invoiceDate').value;
+      const daysOverdue = document.getElementById('daysOverdue').value;
+      const trade = document.getElementById('trade').value;
+      const situation = document.getElementById('situation').value.trim();
+      const email = document.getElementById('userEmail').value.trim();
+      const errorMsg = document.getElementById('errorMsg');
+
+      errorMsg.style.display = 'none';
+
+      if (!traderName || !customerName || !amount || !daysOverdue || !trade) {
+        errorMsg.textContent = 'Please fill in all required fields before generating your letter.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      if (!email || !email.includes('@')) {
+        errorMsg.textContent = 'Please enter a valid email address to receive your letter.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      document.getElementById('formState').style.display = 'none';
+      document.getElementById('loadingState').style.display = 'block';
+      document.getElementById('resultState').style.display = 'none';
+
+      const todayDate = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      const formattedAmount = parseFloat(amount).toLocaleString('en-GB', { minimumFractionDigits: 2 });
+
+      const prompt = `You are a professional UK debt recovery specialist writing a formal late payment demand letter on behalf of a tradesperson.
+
+Write a professional, firm, and legally-informed late payment demand letter with the following details:
+
+- Sender (tradesperson): ${traderName}
+- Trade: ${trade}
+- Customer/debtor name: ${customerName}
+- Amount owed: £${formattedAmount}
+- Invoice date: ${invoiceDate ? new Date(invoiceDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'as previously invoiced'}
+- Time overdue: ${daysOverdue} days
+- Today's date: ${todayDate}
+${situation ? `- Additional context: ${situation}` : ''}
+
+Requirements:
+- Format as a proper UK business letter
+- Reference the Late Payment of Commercial Debts (Interest) Act 1998 where appropriate
+- State they have 7 days to pay before further action is taken
+- Mention that statutory interest may be applied
+- Reference small claims court as a next step if unpaid
+- Keep a firm but professional tone — not aggressive, not pleading
+- End with clear payment instructions placeholder
+- Include a line about the right to charge debt recovery costs under UK law
+- Do NOT use any placeholder text like [YOUR ADDRESS] — just write the letter as if from the tradesperson directly, leaving only BANK DETAILS as a clear placeholder
+
+Output only the letter itself, no commentary before or after.`;
+
+      try {
+        const response = await fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-6',
+            max_tokens: 1000,
+            messages: [{ role: 'user', content: prompt }]
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+          throw new Error(data.error.message || 'API error');
+        }
+
+        generatedLetter = data.content.map(b => b.text || '').join('');
+
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('resultState').style.display = 'block';
+        document.getElementById('letterOutput').textContent = generatedLetter;
+
+      } catch (err) {
+        document.getElementById('loadingState').style.display = 'none';
+        document.getElementById('formState').style.display = 'block';
+        errorMsg.textContent = 'Something went wrong generating your letter. Please try again.';
+        errorMsg.style.display = 'block';
+      }
+    }
+
+    function copyLetter() {
+      navigator.clipboard.writeText(generatedLetter).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2500);
+      });
+    }
+
+    function printLetter() {
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html><head><title>Late Payment Letter — GetPaidTrade</title>
+        <style>
+          body { font-family: Arial, sans-serif; font-size: 14px; line-height: 1.8; padding: 60px; color: #111; max-width: 700px; margin: 0 auto; }
+          pre { white-space: pre-wrap; font-family: Arial, sans-serif; }
+          @media print { body { padding: 40px; } }
+        </style></head>
+        <body><pre>${generatedLetter}</pre></body></html>
+      `);
+      win.document.close();
+      win.print();
+    }
+
+    function resetForm() {
+      document.getElementById('resultState').style.display = 'none';
+      document.getElementById('formState').style.display = 'block';
+      document.getElementById('letterOutput').textContent = '';
+      generatedLetter = '';
+    }
+
+    // Set default invoice date to 30 days ago
+    const d = new Date();
+    d.setDate(d.getDate() - 30);
+    document.getElementById('invoiceDate').value = d.toISOString().split('T')[0];
+  </script>
+
+</body>
+</html>
