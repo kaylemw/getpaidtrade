@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Late Payment Interest Calculator — GetPaidTrade</title>
+  <meta name="description" content="Free UK late payment interest calculator for tradespeople. Calculate exactly how much statutory interest and compensation you're owed under the Late Payment Act 1998." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --yellow: #F5C400; --yellow-dark: #D4A900; --black: #0F0F0F; --dark: #1A1A1A; --mid: #2A2A2A; --border: #333333; --text: #E8E8E8; --muted: #888888; --white: #FFFFFF; --green: #2ECC71; }
+    body { background: var(--black); color: var(--text); font-family: 'Inter', sans-serif; font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+    nav { position: sticky; top: 0; z-index: 100; background: rgba(15,15,15,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 0.05em; color: var(--white); text-decoration: none; }
+    .nav-logo span { color: var(--yellow); }
+    .nav-cta { background: var(--yellow); color: var(--black); font-weight: 700; font-size: 13px; padding: 8px 18px; border-radius: 4px; text-decoration: none; }
+    .container { max-width: 720px; margin: 0 auto; padding: 56px 24px 80px; }
+    .hero { text-align: center; margin-bottom: 40px; }
+    .hero-eyebrow { display: inline-block; background: rgba(245,196,0,0.12); color: var(--yellow); font-size: 12px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 24px; border: 1px solid rgba(245,196,0,0.25); }
+    .hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 6vw, 56px); color: var(--white); letter-spacing: 0.02em; margin-bottom: 12px; }
+    .hero h1 span { color: var(--yellow); }
+    .hero p { color: var(--muted); font-size: 15px; max-width: 480px; margin: 0 auto; }
+    .tool-card { background: var(--dark); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 32px; }
+    .tool-card-header { background: var(--mid); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 10px; }
+    .tool-card-header-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--yellow); }
+    .tool-card-header span { font-size: 13px; font-weight: 600; color: var(--text); }
+    .tool-card-body { padding: 28px 24px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+    @media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+    input, select { background: var(--mid); border: 1px solid var(--border); border-radius: 6px; color: var(--white); font-family: 'Inter', sans-serif; font-size: 14px; padding: 10px 14px; outline: none; width: 100%; max-width: 100%; box-sizing: border-box; }
+    input:focus, select:focus { border-color: var(--yellow); }
+    .btn-primary { width: 100%; background: var(--yellow); color: var(--black); font-weight: 700; font-size: 15px; padding: 14px 24px; border: none; border-radius: 6px; cursor: pointer; margin-top: 8px; }
+    .btn-primary:hover { background: var(--yellow-dark); }
+    .result-box { display: none; background: rgba(245,196,0,0.06); border: 1px solid rgba(245,196,0,0.25); border-radius: 10px; padding: 28px 24px; margin-top: 20px; }
+    .result-total { font-family: 'Bebas Neue', sans-serif; font-size: 48px; color: var(--yellow); line-height: 1; margin-bottom: 4px; }
+    .result-label { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+    .result-breakdown { border-top: 1px solid rgba(245,196,0,0.2); padding-top: 16px; }
+    .breakdown-row { display: flex; justify-content: space-between; font-size: 14px; color: #CCCCCC; margin-bottom: 10px; }
+    .breakdown-row strong { color: var(--white); }
+    .breakdown-row.total { border-top: 1px solid var(--border); padding-top: 10px; margin-top: 6px; font-weight: 700; }
+    .breakdown-row.total span:last-child { color: var(--yellow); }
+    .info-box { background: var(--dark); border: 1px solid var(--border); border-radius: 10px; padding: 24px; margin-bottom: 24px; }
+    .info-box h2 { font-size: 16px; color: var(--white); margin-bottom: 10px; }
+    .info-box p { font-size: 14px; color: #AAAAAA; line-height: 1.7; margin-bottom: 10px; }
+    .info-box p:last-child { margin-bottom: 0; }
+    .rate-note { font-size: 12px; color: #666; text-align: center; margin-top: 16px; }
+    .cta-banner { background: var(--dark); border: 1px solid var(--yellow); border-radius: 10px; padding: 24px; text-align: center; margin-top: 32px; }
+    .cta-banner p { font-size: 14px; color: #CCCCCC; margin-bottom: 14px; }
+    .cta-banner a { display: inline-block; background: var(--yellow); color: var(--black); font-weight: 700; font-size: 14px; padding: 12px 28px; border-radius: 6px; text-decoration: none; }
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; max-width: 720px; margin: 0 auto; text-align: center; }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">GetPaid<span>Trade</span></a>
+    <a href="/#tool" class="nav-cta">Free Letter Generator →</a>
+  </nav>
+
+  <div class="container">
+    <div class="hero">
+      <div class="hero-eyebrow">Free Tool for UK Tradespeople</div>
+      <h1>Late Payment <span>Interest Calculator</span></h1>
+      <p>Find out exactly how much statutory interest and compensation you're legally owed under the Late Payment of Commercial Debts Act 1998.</p>
+    </div>
+
+    <div class="tool-card">
+      <div class="tool-card-header">
+        <div class="tool-card-header-dot"></div>
+        <span>Interest Calculator</span>
+      </div>
+      <div class="tool-card-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Invoice Amount (£)</label>
+            <input type="number" id="amount" placeholder="e.g. 1450" min="1" />
+          </div>
+          <div class="form-group">
+            <label>Days Overdue</label>
+            <input type="number" id="daysOverdue" placeholder="e.g. 45" min="1" />
+          </div>
+        </div>
+        <button class="btn-primary" onclick="calculateInterest()">Calculate What I'm Owed</button>
+
+        <div class="result-box" id="resultBox">
+          <div class="result-total" id="resultTotal">£0.00</div>
+          <div class="result-label">Total you're entitled to claim, on top of the original invoice</div>
+          <div class="result-breakdown">
+            <div class="breakdown-row"><span>Original invoice amount</span><strong id="breakdownOriginal">£0.00</strong></div>
+            <div class="breakdown-row"><span>Statutory interest (8% + base rate)</span><strong id="breakdownInterest">£0.00</strong></div>
+            <div class="breakdown-row"><span>Fixed compensation (per the Act)</span><strong id="breakdownCompensation">£0.00</strong></div>
+            <div class="breakdown-row total"><span>Total owed to you</span><span id="breakdownTotal">£0.00</span></div>
+          </div>
+        </div>
+
+        <div class="rate-note">Calculated using Bank of England base rate of 3.75% (correct as of 18 June 2026)</div>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <h2>How This Is Calculated</h2>
+      <p>Under the Late Payment of Commercial Debts (Interest) Act 1998, UK businesses have the legal right to charge statutory interest on overdue invoices at 8% above the Bank of England base rate, calculated daily from the date payment became due.</p>
+      <p>You're also entitled to a fixed compensation amount on top of interest, set by law: £40 for debts under £1,000, £70 for debts between £1,000 and £9,999, and £100 for debts of £10,000 or more.</p>
+      <p>This applies automatically — you don't need to have mentioned it on your original invoice for the right to exist, though mentioning it in your payment terms makes it easier to enforce.</p>
+    </div>
+
+    <div class="cta-banner">
+      <p>Got the numbers — now get the letter that gets you paid. Generate a professional demand letter referencing this exact interest calculation, free.</p>
+      <a href="/#tool">Generate My Letter →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>GetPaidTrade — <a href="/">Homepage</a> · <a href="/terms.html">Terms</a> · <a href="/privacy.html">Privacy</a></p>
+    <p style="margin-top:8px;">This calculator provides a general estimate based on UK statutory rates and does not constitute legal advice.</p>
+  </footer>
+
+  <script>
+    const BASE_RATE = 3.75;
+    const STATUTORY_MARGIN = 8;
+
+    function calculateInterest() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      const days = parseFloat(document.getElementById('daysOverdue').value);
+
+      if (!amount || !days || amount <= 0 || days <= 0) {
+        alert('Please enter a valid invoice amount and number of days overdue.');
+        return;
+      }
+
+      const annualRate = (BASE_RATE + STATUTORY_MARGIN) / 100;
+      const interest = amount * annualRate * (days / 365);
+
+      let compensation;
+      if (amount < 1000) compensation = 40;
+      else if (amount < 10000) compensation = 70;
+      else compensation = 100;
+
+      const totalOwed = interest + compensation;
+      const grandTotal = amount + totalOwed;
+
+      document.getElementById('resultTotal').textContent = '£' + totalOwed.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('breakdownOriginal').textContent = '£' + amount.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('breakdownInterest').textContent = '£' + interest.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('breakdownCompensation').textContent = '£' + compensation.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('breakdownTotal').textContent = '£' + grandTotal.toLocaleString('en-GB', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      document.getElementById('resultBox').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
