@@ -78,7 +78,7 @@
         <div class="form-grid">
           <div class="form-group">
             <label>Invoice Amount (£)</label>
-            <input type="number" id="amount" placeholder="e.g. 1450" min="1" />
+            <input type="text" inputmode="decimal" id="amount" placeholder="e.g. 1,450" oninput="formatNumberInput(this)" />
           </div>
           <div class="form-group">
             <label>Days Overdue</label>
@@ -124,8 +124,17 @@
     const BASE_RATE = 3.75;
     const STATUTORY_MARGIN = 8;
 
+    function formatNumberInput(input) {
+      let value = input.value.replace(/[^\d.]/g, '');
+      const parts = value.split('.');
+      if (parts.length > 2) value = parts[0] + '.' + parts.slice(1).join('');
+      const [whole, decimal] = value.split('.');
+      const formattedWhole = whole.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      input.value = decimal !== undefined ? formattedWhole + '.' + decimal : formattedWhole;
+    }
+
     function calculateInterest() {
-      const amount = parseFloat(document.getElementById('amount').value);
+      const amount = parseFloat(document.getElementById('amount').value.replace(/,/g, ''));
       const days = parseFloat(document.getElementById('daysOverdue').value);
 
       if (!amount || !days || amount <= 0 || days <= 0) {
